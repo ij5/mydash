@@ -93,7 +93,7 @@ dependencies = [
 
 [package.metadata]
 requires-dist = [
-    { name = "asyncio" },
+    { name = "asyncio", specifier = ">=3.4.3" },
     { name = "requests", specifier = ">=2.32.3" },
 ]
 
