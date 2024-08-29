@@ -48,5 +48,17 @@ class Client():
             result = self.session.post(f"{self.endpoint}/api/collections/widgets/records", data=widget.toJSON())
             if not result.ok:
                 raise Exception(result.text)()
-        
+    
+    def remove_widget(self, name: str):
+        exists = self.session.get(f"{self.endpoint}/api/collections/widgets/records", params={
+            "filter": f'name = "{name}"',
+        })
+        if not exists.ok:
+            raise Exception(exists.text)
+        data = exists.json()
+        if data['totalItems'] >= 1:
+            id = data['items'][0]['id']
+            result = self.session.delete(f"{self.endpoint}/api/collections/widgets/records/{id}")
+            if not result.ok:
+                raise Exception(result.text)
 

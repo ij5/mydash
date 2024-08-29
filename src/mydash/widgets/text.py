@@ -25,9 +25,13 @@ class TextWidget(BaseWidget):
         self.type = "text"
         self.content = TextContent()
 
-    def align(self, x: str, y: str = "start"):
+    def align(self, x: str, y: str = "center"):
+        """left, right, center"""
         self.content.halign = x
         self.content.valign = y
+
+    def clear_text(self):
+        self.content.text.clear()
 
     def append_text(
         self,
