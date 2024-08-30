@@ -1,5 +1,5 @@
 import requests
-from .widgets import BaseWidget, TextWidget
+from .widgets import BarGraphWidget, TextWidget, BaseWidget
 
 class Client():
     def __init__(self, *, id: str, password: str, endpoint: str = "https://dashboard-api.llms.kr"):
@@ -30,6 +30,10 @@ class Client():
 
     def create_text_widget(self, name: str, title: str) -> TextWidget:
         widget = TextWidget(name=name, title=title, author=self.uid)
+        return widget
+    
+    def create_bar_graph_widget(self, name: str, title: str) -> BarGraphWidget:
+        widget = BarGraphWidget(name=name, title=title, author=self.uid)
         return widget
 
     def push_widget(self, widget: BaseWidget):
