@@ -142,6 +142,7 @@ class Client:
             self.push_widget(result)
             self.widgets[name] = result
             job = schedule.every(interval)
+            tz = timezone("Asia/Seoul")
             if interval > 1:
                 if every == "seconds":
                     job = job.seconds
@@ -156,11 +157,11 @@ class Client:
                 if every == "second":
                     job = job.second
                 elif every == "minute":
-                    job = job.minute.at(at, timezone("Asia/Seoul"))
+                    job = job.minute.at(at, tz)
                 elif every == "hour":
-                    job = job.hour.at(at, timezone("Asia/Seoul"))
+                    job = job.hour.at(at, tz)
                 elif every == "day":
-                    job = job.day.at(at, timezone("Asia/Seoul"))
+                    job = job.day.at(at, tz)
                 else:
                     print(f"Error({name}): interval == 1: second, minute, hour, day")
                     return
