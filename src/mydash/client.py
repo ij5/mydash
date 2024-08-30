@@ -8,7 +8,7 @@ import threading
 from pytz import timezone
 import time
 import schedule
-from .widgets import BarGraphWidget, TextWidget, BaseWidget
+from .widgets import BarGraphWidget, TextWidget, BaseWidget, ImageWidget
 
 
 class WidgetType(Enum):
@@ -61,6 +61,10 @@ class Client:
 
     def create_bar_graph_widget(self, name: str, title: str) -> BarGraphWidget:
         widget = BarGraphWidget(name=name, title=title, author=self.uid)
+        return widget
+    
+    def create_image_widget(self, name: str, title: str) -> ImageWidget:
+        widget = ImageWidget(name=name, title=title, author=self.uid)
         return widget
 
     def push_widget(self, widget: BaseWidget):
@@ -125,6 +129,8 @@ class Client:
             widget = self.create_text_widget(name=name, title=title)
         elif type == WidgetType.BAR_GRAPH:
             widget = self.create_bar_graph_widget(name, title)
+        elif type == WidgetType.IMAGE:
+            widget = self.create_image_widget(name, title)
         else:
             widget = BaseWidget(name, title, self.uid, 1, 1, "#e3e3e3", 10)
 

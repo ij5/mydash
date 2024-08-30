@@ -11,7 +11,7 @@ class TextWidget(BaseWidget):
         width: int = 1,
         height: int = 1,
         background: str = "#e3e3e3",
-        order: int = 1,
+        order: int = 10,
     ):
         super().__init__(
             name=name,
