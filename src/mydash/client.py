@@ -123,7 +123,7 @@ class Client:
         title: str,
         interval: int = 1,
         every: str = "minute",
-        at: str = ":0",
+        at: str = ":00",
     ):
         if type == WidgetType.TEXT:
             widget = self.create_text_widget(name=name, title=title)
