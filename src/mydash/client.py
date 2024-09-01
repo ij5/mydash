@@ -8,6 +8,7 @@ import threading
 from pytz import timezone
 import time
 import schedule
+import json
 from .widgets import BarGraphWidget, TextWidget, BaseWidget, ImageWidget
 
 
@@ -54,6 +55,59 @@ class Client:
             headers={},
         )
         return result["items"]
+    
+    def get(self, name: str):
+        result = self.session.get(
+            f"{self.endpoint}/api/collections/storage/records",
+            params={
+                "filter": f'name = "{name}"',
+            }
+        )
+        result = result.json()
+        items = result['items']
+        if len(items) == 0:
+            return None
+        id = items[0]['id']
+        result = self.session.get(
+            f"{self.endpoint}/api/collections/storage/records/{id}",
+        )
+        result = result.json()
+        result =  json.loads(result['data'])
+        return result
+    
+    def set(self, name: str, data):
+        result = self.session.get(
+            f"{self.endpoint}/api/collections/storage/records",
+            params={
+                "filter": f'name = "{name}"',
+            }
+        )
+        result = result.json()
+        items = result['items']
+        if len(items) == 0:
+            result = self.session.post(
+                f"{self.endpoint}/api/collections/storage/records",
+                json={
+                    "name": name,
+                    "data": data,
+                }
+            )
+            if not result.ok:
+                raise Exception(result.text)
+            return
+        id = items[0]['id']
+        result = self.session.patch(
+            f"{self.endpoint}/api/collections/storage/records/{id}",
+            json={
+                "name": name,
+                "data": data,
+            },
+        )
+        if not result.ok:
+            raise Exception(result.text)
+        return
+
+        
 
     def create_text_widget(self, name: str, title: str) -> TextWidget:
         widget = TextWidget(name=name, title=title, author=self.uid)
