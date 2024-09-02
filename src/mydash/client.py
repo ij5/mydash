@@ -72,7 +72,7 @@ class Client:
             f"{self.endpoint}/api/collections/storage/records/{id}",
         )
         result = result.json()
-        result =  json.loads(result['data'])
+        result = result['data']
         return result
     
     def set(self, name: str, data):
