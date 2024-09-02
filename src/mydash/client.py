@@ -89,7 +89,7 @@ class Client:
                 f"{self.endpoint}/api/collections/storage/records",
                 json={
                     "name": name,
-                    "data": data,
+                    "data": json.dumps(data),
                 }
             )
             if not result.ok:
@@ -100,7 +100,7 @@ class Client:
             f"{self.endpoint}/api/collections/storage/records/{id}",
             json={
                 "name": name,
-                "data": data,
+                "data": json.dumps(data),
             },
         )
         if not result.ok:
