@@ -1,5 +1,4 @@
-from .base import BaseWidget
-
+from .base import BaseWidget, BaseContent
 
 class BarGraphWidget(BaseWidget):
     def __init__(
@@ -25,7 +24,38 @@ class BarGraphWidget(BaseWidget):
         background: str = "#00ffffff",
         foreground: str = "#000000",
     ):
-        self.content.data.append(
+        self.content.add_data(x, y, width, background, foreground)
+
+    def align(self, align: str = "around"):
+        """around, space, left, right, center"""
+        self.content.align(align)
+
+    def set_label(self, pos: int, text: str, color: str = "#000000"):
+        self.content.set_label(pos, text, color)
+    
+    def label_visibility(self, visible: bool = True):
+        self.content.label_visibility(visible)
+
+
+class BarGraphContent(BaseContent):
+    def __init__(self):
+        self.type = "bar"
+        self.alignment = "around"
+        self.data: list[BarGraphData] = []
+        self.description = ""
+        self.foreground = "#85a7fd"
+        self.showYLabel = True
+        self.xlabels: list[BarGraphXLabel] = []
+
+    def add_data(
+        self,
+        x: int,
+        y: float,
+        width: float = 10,
+        background: str = "#00ffffff",
+        foreground: str = "#000000",
+    ):
+        self.data.append(
             BarGraphData(
                 x=x,
                 y=y,
@@ -37,10 +67,10 @@ class BarGraphWidget(BaseWidget):
 
     def align(self, align: str = "around"):
         """around, space, left, right, center"""
-        self.content.alignment = align
+        self.alignment = align
 
     def set_label(self, pos: int, text: str, color: str = "#000000"):
-        self.content.xlabels.append(
+        self.xlabels.append(
             BarGraphXLabel(
                 color=color,
                 pos=pos,
@@ -49,17 +79,7 @@ class BarGraphWidget(BaseWidget):
         )
     
     def label_visibility(self, visible: bool = True):
-        self.content.showYLabel = visible
-
-
-class BarGraphContent(object):
-    def __init__(self):
-        self.alignment = "around"
-        self.data: list[BarGraphData] = []
-        self.description = ""
-        self.foreground = "#85a7fd"
-        self.showYLabel = True
-        self.xlabels: list[BarGraphXLabel] = []
+        self.showYLabel = visible
 
 
 class BarGraphXLabel(object):

@@ -9,7 +9,18 @@ from pytz import timezone
 import time
 import schedule
 import json
-from .widgets import BarGraphWidget, TextWidget, BaseWidget, ImageWidget
+from .widgets import (
+    BarGraphWidget,
+    TextWidget,
+    BaseWidget,
+    ImageWidget,
+    CustomWidget,
+
+    BarGraphContent,
+    TextContent,
+    ImageContent,
+    CustomContent,
+)
 
 
 class WidgetType(Enum):
@@ -17,6 +28,7 @@ class WidgetType(Enum):
     IMAGE = 2
     BAR_GRAPH = 3
     LINE_GRAPH = 4
+    CUSTOM = 0
 
 
 class Client:
@@ -55,47 +67,47 @@ class Client:
             headers={},
         )
         return result["items"]
-    
+
     def get(self, name: str):
         result = self.session.get(
             f"{self.endpoint}/api/collections/storage/records",
             params={
                 "filter": f'name = "{name}"',
-            }
+            },
         )
         result = result.json()
-        items = result['items']
+        items = result["items"]
         if len(items) == 0:
             return None
-        id = items[0]['id']
+        id = items[0]["id"]
         result = self.session.get(
             f"{self.endpoint}/api/collections/storage/records/{id}",
         )
         result = result.json()
-        result = result['data']
+        result = result["data"]
         return result
-    
+
     def set(self, name: str, data):
         result = self.session.get(
             f"{self.endpoint}/api/collections/storage/records",
             params={
                 "filter": f'name = "{name}"',
-            }
+            },
         )
         result = result.json()
-        items = result['items']
+        items = result["items"]
         if len(items) == 0:
             result = self.session.post(
                 f"{self.endpoint}/api/collections/storage/records",
                 json={
                     "name": name,
                     "data": json.dumps(data),
-                }
+                },
             )
             if not result.ok:
                 raise Exception(result.text)
             return
-        id = items[0]['id']
+        id = items[0]["id"]
         result = self.session.patch(
             f"{self.endpoint}/api/collections/storage/records/{id}",
             json={
@@ -107,8 +119,6 @@ class Client:
             raise Exception(result.text)
         return
 
-        
-
     def create_text_widget(self, name: str, title: str) -> TextWidget:
         widget = TextWidget(name=name, title=title, author=self.uid)
         return widget
@@ -116,10 +126,30 @@ class Client:
     def create_bar_graph_widget(self, name: str, title: str) -> BarGraphWidget:
         widget = BarGraphWidget(name=name, title=title, author=self.uid)
         return widget
-    
+
     def create_image_widget(self, name: str, title: str) -> ImageWidget:
         widget = ImageWidget(name=name, title=title, author=self.uid)
         return widget
+    
+    def create_layout_widget(self, name: str, title: str) -> CustomWidget:
+        widget = CustomWidget(name=name, title=title, author=self.uid)
+        return widget
+
+    def add_text_content(self):
+        content = TextContent()
+        return content
+    
+    def add_bar_graph_content(self):
+        content = BarGraphContent()
+        return content
+    
+    def add_image_content(self):
+        content = ImageContent()
+        return content
+    
+    def add_custom_content(self):
+        content = CustomContent()
+        return content
 
     def push_widget(self, widget: BaseWidget):
         exists = self.session.get(
@@ -185,6 +215,8 @@ class Client:
             widget = self.create_bar_graph_widget(name, title)
         elif type == WidgetType.IMAGE:
             widget = self.create_image_widget(name, title)
+        elif type == WidgetType.CUSTOM:
+            widget = self.create_layout_widget(name, title)
         else:
             widget = BaseWidget(name, title, self.uid, 1, 1, "#e3e3e3", 10)
 

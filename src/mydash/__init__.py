@@ -1,5 +1,16 @@
 from .client import Client, WidgetType
-from .widgets import BarGraphWidget, TextWidget, BaseWidget, ImageWidget
+from .widgets import (
+    BarGraphWidget,
+    TextWidget,
+    BaseWidget,
+    ImageWidget,
+    CustomWidget,
+    BarGraphContent,
+    TextContent,
+    BaseContent,
+    ImageContent,
+    CustomContent,
+)
 
 __all__ = [
     "Client",
@@ -8,4 +19,11 @@ __all__ = [
     "BaseWidget",
     "WidgetType",
     "ImageWidget",
+    "CustomWidget",
+
+    "BarGraphContent",
+    "TextContent",
+    "BaseContent",
+    "ImageContent",
+    "CustomContent",
 ]

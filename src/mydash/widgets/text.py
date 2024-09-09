@@ -1,4 +1,4 @@
-from .base import BaseWidget
+from .base import BaseWidget, BaseContent
 
 
 class TextWidget(BaseWidget):
@@ -45,15 +45,13 @@ class TextWidget(BaseWidget):
         underline: bool = False,
     ):
         self.content.append_text(
-            TextData(
-                text=text,
-                background=background,
-                bold=bold,
-                color=color,
-                italic=italic,
-                size=size,
-                underline=underline,
-            )
+            text=text,
+            background=background,
+            bold=bold,
+            color=color,
+            italic=italic,
+            size=size,
+            underline=underline,
         )
 
 
@@ -77,11 +75,33 @@ class TextData(object):
         self.size = size
         self.underline = underline
 
-class TextContent(object):
+
+class TextContent(BaseContent):
     def __init__(self):
+        self.type = "text"
         self.halign = "center"
         self.text: list[TextData] = []
         self.valign = "center"
 
-    def append_text(self, text: TextData):
-        self.text.append(text)
+    def append_text(
+        self,
+        text: str,
+        *,
+        background: str = "#00ffffff",
+        bold: bool = False,
+        color: str = "#000000",
+        italic: bool = False,
+        size: int = 15,
+        underline: bool = False,
+    ):
+        self.text.append(
+            TextData(
+                text=text,
+                background=background,
+                bold=bold,
+                color=color,
+                italic=italic,
+                size=size,
+                underline=underline,
+            )
+        )

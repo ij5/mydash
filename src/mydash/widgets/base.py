@@ -41,3 +41,7 @@ class BaseWidget(Object):
 
     def set_order(self, order: int):
         self.order = order
+
+class BaseContent(Object):
+    def __init__(self):
+        self.type = "base"

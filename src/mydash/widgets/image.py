@@ -1,4 +1,4 @@
-from .base import BaseWidget
+from .base import BaseWidget, BaseContent
 import base64
 
 class ImageWidget(BaseWidget):
@@ -18,12 +18,16 @@ class ImageWidget(BaseWidget):
         self.content = ImageContent()
 
     def set_image(self, data: bytes, fit: str = "cover"):
-        """contain, cover, fill"""
-        self.content.data = base64.b64encode(data).decode()
-        self.content.fit = fit
+        self.content.set_image(data, fit)
 
 
-class ImageContent(object):
+class ImageContent(BaseContent):
     def __init__(self):
+        self.type = "image"
         self.data = ""
         self.fit = "cover"
+
+    def set_image(self, data: bytes, fit: str = "cover"):
+        """contain, cover, fill"""
+        self.data = base64.b64encode(data).decode()
+        self.fit = fit
